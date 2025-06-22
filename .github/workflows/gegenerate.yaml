@@ -12,7 +12,7 @@ on:
 permissions: write-all
 
 jobs:
-  lint:
+  gogenerate:
     runs-on: ubuntu-latest
     strategy:
       matrix:
