@@ -35,7 +35,7 @@ jobs:
           cache-dependency-path: go.sum
 
       - name: Go Generate
-        working-directory: "./examples"
+        working-directory: "./.examples"
         run: |
           go mod tidy
           go generate ./...
