@@ -13,6 +13,7 @@ import (
 	"slices"
 	"strings"
 	"text/template"
+	"unicode"
 
 	"golang.org/x/tools/go/ast/astutil"
 	"golang.org/x/tools/go/packages"
@@ -32,9 +33,7 @@ func Generate(_ context.Context, source, dest, version string) ([]byte, error) {
 		return nil, fmt.Errorf("failed to parse file %s: %w", source, err)
 	}
 
-	pkgs, err := packages.Load(&packages.Config{
-		Mode: packages.NeedName | packages.NeedTypes | packages.NeedSyntax | packages.NeedImports,
-	}, path.Dir(source))
+	pkgs, err := packages.Load(&packages.Config{}, path.Dir(source))
 	if err != nil {
 		return nil, fmt.Errorf("failed to load packages: %w", err)
 	}
@@ -69,9 +68,20 @@ func Generate(_ context.Context, source, dest, version string) ([]byte, error) {
 		return nil, fmt.Errorf("failed to get absolute path of destination file %s: %w", dest, err)
 	}
 	if filepath.Dir(absSource) != filepath.Dir(absDest) {
+		f.OriginalPackageName = f.PackageName
+		destPkgs, _ := packages.Load(&packages.Config{}, path.Dir(source))
+		switch {
+		case len(destPkgs) > 0:
+			f.PackageName = filepath.Base(destPkgs[0].ID)
+		default:
+			destDir, _ := filepath.Split(dest)
+			f.PackageName = filepath.Base(destDir)
+		}
+
 		f.Imports[pkgs[pkgIdx].Name] = Package{
 			Path: pkgs[pkgIdx].ID,
 		}
+		f.DifferInDest = true
 	}
 	visitor := newVisitor(&f, nodes.Imports)
 	astutil.Apply(nodes, nil, visitor.Visit)
@@ -256,6 +266,18 @@ func (v *Visitor) valueFromExpr(t ast.Expr) (*Value, error) {
 			Returns: rets,
 		}, nil
 	case *ast.Ident:
+		if v.f.DifferInDest && unicode.IsUpper(rune(t.Name[0])) {
+			// If an identifier begins with an uppercase letter,
+			// it is assumed to be of the type defined in the original package.
+			importPath := v.getImportPath(v.f.OriginalPackageName)
+			if importPath == "" {
+				return nil, fmt.Errorf("import '%s' not found", t.Name)
+			}
+			return &Value{
+				Type:    t.Name,
+				Package: &Package{Path: importPath},
+			}, nil
+		}
 		return &Value{
 			Type: t.Name,
 		}, nil

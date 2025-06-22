@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/miyamo2/nrdeco/internal"
@@ -52,6 +53,14 @@ func rootCmd() (*cobra.Command, error) {
 				return fmt.Errorf("[nrdeco] failed to generate code from %s: %w", sourceFlag, err)
 			}
 
+			destDir, _ := filepath.Split(dest)
+			fileInfo, _ := os.Lstat(filepath.Clean(destDir))
+			perm := os.ModePerm
+			if fileInfo != nil {
+				perm = fileInfo.Mode() & os.ModePerm
+			}
+
+			os.MkdirAll(destDir, perm)
 			f, err := os.Create(dest)
 			defer func() {
 				_ = f.Close()

@@ -1,4 +1,5 @@
 //go:generate go tool nrdeco -s $GOFILE
+//go:generate go tool nrdeco -s $GOFILE -d ../output_different_pkg/$GOPACKAGE/$GOFILE
 package usecase
 
 import (

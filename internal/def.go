@@ -10,10 +10,13 @@ import (
 // File represents a Go source file
 type File struct {
 	// Version represents the version of nrdeco used to generate this file.
-	Version     string
-	PackageName string
-	Imports     map[string]Package
-	Interfaces  []Interface
+	Version             string
+	PackageName         string
+	OriginalPackageName string
+	Imports             map[string]Package
+	Interfaces          []Interface
+	// DifferInDest indicates if the file to be generated in a different destination than the original file.
+	DifferInDest bool
 }
 
 // StringOfImports returns a string representation of the imports in the file, sorted by package path
@@ -23,6 +26,15 @@ func (f *File) StringOfImports() string {
 		v = append(v, fmt.Sprintf("\t\"%s\"", f.Imports[k].Path))
 	}
 	return strings.Join(v, "\n")
+}
+
+// InterfaceNameWithPackage returns the interface name with the package identifier
+// if the file is generated in a different destination than the original file.
+func (f *File) InterfaceNameWithPackage(name string) string {
+	if !f.DifferInDest {
+		return name
+	}
+	return fmt.Sprintf("%s.%s", f.OriginalPackageName, name)
 }
 
 // Interface represents a type
@@ -102,15 +114,6 @@ func (p *Params) BeGenerated() bool {
 
 // Returns represents the method return values
 type Returns []Value
-
-// Signature returns the method return values in the format "_ Return0Type, _ Return1Type".
-func (r *Returns) Signature() string {
-	var v []string
-	for _, ret := range *r {
-		v = append(v, fmt.Sprintf("_ %s", ret.StringOfType()))
-	}
-	return strings.Join(v, ", ")
-}
 
 const (
 	typePointer        = "*"

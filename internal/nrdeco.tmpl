@@ -10,7 +10,7 @@ import (
 {{ range $t := .Interfaces }}
 // NR{{ $t.Name }} implements {{ $.PackageName }}.{{ $t.Name }} with New Relic instrumentation.
 type NR{{ $t.Name }} struct {
-	{{ $t.Name }}
+	{{ $.InterfaceNameWithPackage $t.Name }}
 }
 {{ range $method := $t.Methods }}
 func (n *NR{{ $t.Name }}) {{ $method.Signature }} {
