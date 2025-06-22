@@ -5,10 +5,10 @@ package usecase
 
 import (
 	"context"
-	"github.com/miyamo2/nrdeco/examples/usecas
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"os"
 	"strings"
+	"github.com/miyamo2/nrdeco/examples/usecase"
 )
 
 // NRUserUseCase implements usecase.UserUseCase with New Relic instrumentation.

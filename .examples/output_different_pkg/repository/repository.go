@@ -6,9 +6,9 @@ package repository
 import (
 	"context"
 	"github.com/miyamo2/nrdeco/examples/domain/model"
-	"github.com/miyamo2/nrdeco/examples/domain
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"os"
+	"github.com/miyamo2/nrdeco/examples/domain/repository"
 	"strings"
 )
 
