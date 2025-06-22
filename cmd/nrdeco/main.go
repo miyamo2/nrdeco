@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	// version of the nrdeco
-	version string
-	// revision of the nrdeco
-	revision string
+	// Version of the nrdeco
+	Version string
+	// Revision of the nrdeco
+	Revision string
 )
 
 func main() {
@@ -42,13 +42,13 @@ func rootCmd() (*cobra.Command, error) {
 		Long:  `nrdeco generates decorated implementations with New Relic segments from interfaces.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if versionFlag {
-				cmd.Printf("[nrdeco] version %s-%s\n", version, revision)
+				cmd.Printf("[nrdeco] Version %s-%s\n", Version, Revision)
 				return nil
 			}
 			cmd.Printf("[nrdeco] input: %s", sourceFlag)
 			dest := cmp.Or(destFlag, strings.Replace(sourceFlag, ".go", ".nrdeco.go", -1))
 
-			b, err := internal.Generate(cmd.Context(), sourceFlag, dest, version)
+			b, err := internal.Generate(cmd.Context(), sourceFlag, dest, Version)
 			if err != nil {
 				return fmt.Errorf("[nrdeco] failed to generate code from %s: %w", sourceFlag, err)
 			}
@@ -76,7 +76,7 @@ func rootCmd() (*cobra.Command, error) {
 			return nil
 		},
 	}
-	command.Flags().BoolVar(&versionFlag, "version", false, `Print the version of nrdeco.`)
+	command.Flags().BoolVar(&versionFlag, "Version", false, `Print the Version of nrdeco.`)
 	command.Flags().
 		StringVarP(&sourceFlag, "source", "s", "", `A file containing interfaces to be decorate.`)
 	command.Flags().
@@ -89,7 +89,7 @@ func rootCmd() (*cobra.Command, error) {
 	if err != nil {
 		return nil, err
 	}
-	command.MarkFlagsOneRequired("source", "version")
-	command.MarkFlagsMutuallyExclusive("source", "version")
+	command.MarkFlagsOneRequired("source", "Version")
+	command.MarkFlagsMutuallyExclusive("source", "Version")
 	return command, nil
 }
