@@ -110,6 +110,16 @@ func (n *NRUserRepository) GetAllUsersWithContext(ctx context.Context) ([]model.
 3. Use the generated decorator in your application
 
 ```go
+package repository
+
+import (
+	"context"
+	
+	"github.com/miyamo2/nrdeco/examples/domain/repository"
+	"github.com/miyamo2/nrdeco/examples/infra/inmemory"
+	"github.com/newrelic/go-agent/v3/newrelic"
+)
+
 func main() {
     // Initialize New Relic
     app, err := newrelic.NewApplication(/* your config */)
@@ -118,7 +128,7 @@ func main() {
     }
     
     // Create your original repository implementation
-    originalRepo := &UserRepository{}
+    originalRepo := &inmemory.UserRepository{}
     
     // Wrap it with the generated instrumented decorator
     instrumentedRepo := &repository.NRUserRepository{
@@ -131,6 +141,7 @@ func main() {
     
     // Use the instrumented repository - segments are automatically tracked
     user, err := instrumentedRepo.GetUserByIDWithContext(ctx, "123")
+	...
 }
 ```
 
