@@ -4,6 +4,7 @@ go 1.24
 
 require (
 	github.com/google/wire v0.6.0
+	github.com/joho/godotenv v1.5.1
 	github.com/newrelic/go-agent/v3 v3.39.0
 )
 

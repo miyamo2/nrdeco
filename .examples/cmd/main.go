@@ -9,8 +9,13 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/miyamo2/nrdeco/examples/di"
 )
+
+func init() {
+	_ = godotenv.Load()
+}
 
 func main() {
 	mux := di.ServeMux()
