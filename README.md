@@ -5,6 +5,8 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/miyamo2/nrdeco)](https://img.shields.io/github/v/release/miyamo2/nrdeco)
 [![Go Report Card](https://goreportcard.com/badge/github.com/miyamo2/nrdeco)](https://goreportcard.com/report/github.com/miyamo2/nrdeco)
 [![GitHub License](https://img.shields.io/github/license/miyamo2/nrdeco?&color=blue)](https://img.shields.io/github/license/miyamo2/nrdeco?&color=blue)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/miyamo2/nrdeco)
+[![GitMCP](https://img.shields.io/endpoint?url=https://gitmcp.io/badge/miyamo2/nrdeco)](https://gitmcp.io/miyamo2/nrdeco)
 
 **nrdeco** is a Go code generator that automatically adds New Relic APM Segments.
 
