@@ -9,3 +9,5 @@ formatters:
     - gofmt
     - goimports
     - golines
+  exclusions:
+    - ".examples/"
