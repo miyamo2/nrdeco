@@ -76,7 +76,7 @@ func rootCmd() (*cobra.Command, error) {
 			return nil
 		},
 	}
-	command.Flags().BoolVar(&versionFlag, "Version", false, `Print the Version of nrdeco.`)
+	command.Flags().BoolVar(&versionFlag, "version", false, `Print the version of nrdeco.`)
 	command.Flags().
 		StringVarP(&sourceFlag, "source", "s", "", `A file containing interfaces to be decorate.`)
 	command.Flags().
@@ -89,7 +89,7 @@ func rootCmd() (*cobra.Command, error) {
 	if err != nil {
 		return nil, err
 	}
-	command.MarkFlagsOneRequired("source", "Version")
-	command.MarkFlagsMutuallyExclusive("source", "Version")
+	command.MarkFlagsOneRequired("source", "version")
+	command.MarkFlagsMutuallyExclusive("source", "version")
 	return command, nil
 }
