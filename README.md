@@ -123,26 +123,26 @@ import (
 )
 
 func main() {
-    // Initialize New Relic
-    app, err := newrelic.NewApplication(/* your config */)
-    if err != nil {
-        panic(err)
-    }
+	// Initialize New Relic
+	app, err := newrelic.NewApplication(/* your config */)
+	if err != nil {
+		panic(err)
+	}
     
-    // Create your original repository implementation
-    originalRepo := &inmemory.UserRepository{}
+	// Create your original repository implementation
+	originalRepo := &inmemory.UserRepository{}
     
-    // Wrap it with the generated instrumented decorator
-    instrumentedRepo := &repository.NRUserRepository{
-        UserRepository: originalRepo,
-    }
+	// Wrap it with the generated instrumented decorator
+	instrumentedRepo := &repository.NRUserRepository{
+		UserRepository: originalRepo,
+	}
 
-    // Create a transaction
-    txn := app.StartTransaction("test_transaction")
-    ctx := newrelic.NewContext(context.Background(), txn)
+	// Create a transaction
+	txn := app.StartTransaction("test_transaction")
+	ctx := newrelic.NewContext(context.Background(), txn)
     
-    // Use the instrumented repository - segments are automatically tracked
-    user, err := instrumentedRepo.GetUserByIDWithContext(ctx, "123")
+	// Use the instrumented repository - segments are automatically tracked
+	user, err := instrumentedRepo.GetUserByIDWithContext(ctx, "123")
 	...
 }
 ```
